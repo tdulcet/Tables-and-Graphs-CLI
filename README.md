@@ -6,7 +6,7 @@ Command-line tools to output Tables and Graphs/Plots to the console
 
 Copyright © 2023 Teal Dulcet
 
-These command-line tools use my C++ [Table and Graph libraries](https://github.com/tdulcet/Table-and-Graph-Libs), which use [box-drawing](https://en.wikipedia.org/wiki/Box-drawing_character#Unicode), [Braille](https://en.wikipedia.org/wiki/Braille_Patterns), [fraction](https://en.wikipedia.org/wiki/Number_Forms) and other Unicode characters and [terminal colors and formatting](https://misc.flogisoft.com/bash/tip_colors_and_formatting) to output tables and graphs/plots to the console.
+These command-line tools use my C++ [Table and Graph libraries](https://github.com/tdulcet/Table-and-Graph-Libs), which use [box-drawing](https://en.wikipedia.org/wiki/Box-drawing_character#Unicode), [Braille](https://en.wikipedia.org/wiki/Braille_Patterns), [fraction](https://en.wikipedia.org/wiki/Number_Forms) and other Unicode characters and [terminal colors and formatting](https://misc.flogisoft.com/bash/tip_colors_and_formatting) to output tables and graphs/plots to the console. The table tool is designed to extend the existing `-t/--table` options of column command from [util-linux](https://en.wikipedia.org/wiki/Util-linux) with much more functionality.
 
 ❤️ Please visit [tealdulcet.com](https://www.tealdulcet.com/) to support these programs and my other software development.
 
@@ -90,7 +90,7 @@ Examples:
     $ for i in {0..4}; do for j in {0..4}; do echo -n "$(( RANDOM * RANDOM )) "; done; echo; done | sort -n -k 1 | table
 
     Output a table in each style (Bash syntax)
-    $ for s in ascii basic light heavy double light-dashed heavy-dashed; do printf 'a b c\n1 2 3\n' | table --cell-border --style=$s --title "Style: $s"; done
+    $ for s in ascii basic light heavy double arc light-dashed heavy-dashed; do printf 'a b c\n1 2 3\n' | table --cell-border --style=$s --title "Style: $s"; done
 
 ```
 
@@ -234,7 +234,7 @@ Examples:
     $ awk 'BEGIN { pi=atan2(0, -1); width=160; xmin=-(2*pi); xmax=2*pi; xstep=(xmax-xmin)/width; for(i=0; i<width*2; ++i) { x=((i/2)*xstep)+xmin; print x,sin(x),cos(x),sin(x)/cos(x) } }' | graph --height 160 --width 160 --y-min -4 --y-max 4 --no-units-labels
 
     Output a plot in each style (Bash syntax)
-    $ for s in ascii basic light heavy double light-dashed heavy-dashed; do for i in {0..9}; do echo "$i $(( i + 1 ))"; done | graph --height 80 --width 80 --x-min -10 --x-max 10 --y-min -10 --y-max 10 --style=$s --title "Style: $s"; done
+    $ for s in ascii basic light heavy double arc light-dashed heavy-dashed; do for i in {0..9}; do echo "$i $(( i + 1 ))"; done | graph --height 80 --width 80 --x-min -10 --x-max 10 --y-min -10 --y-max 10 --style=$s --title "Style: $s"; done
 
 ```
 

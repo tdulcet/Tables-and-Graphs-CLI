@@ -163,7 +163,7 @@ Examples:
 		 << programname << R"d(
 
     Output a table in each style (Bash syntax)
-    $ for s in ascii basic light heavy double light-dashed heavy-dashed; do printf 'a b c\n1 2 3\n' | )d"
+    $ for s in ascii basic light heavy double arc light-dashed heavy-dashed; do printf 'a b c\n1 2 3\n' | )d"
 		 << programname << R"( --cell-border --style=$s --title "Style: $s"; done
 
 )";

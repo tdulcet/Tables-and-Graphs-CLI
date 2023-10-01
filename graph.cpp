@@ -302,7 +302,7 @@ Examples:
 		 << programname << R"d( --height 160 --width 160 --y-min -4 --y-max 4 --no-units-labels
 
     Output a plot in each style (Bash syntax)
-    $ for s in ascii basic light heavy double light-dashed heavy-dashed; do for i in {0..9}; do echo "$i $(( i + 1 ))"; done | )d"
+    $ for s in ascii basic light heavy double arc light-dashed heavy-dashed; do for i in {0..9}; do echo "$i $(( i + 1 ))"; done | )d"
 		 << programname << R"( --height 80 --width 80 --x-min -10 --x-max 10 --y-min -10 --y-max 10 --style=$s --title "Style: $s"; done
 
 )";
