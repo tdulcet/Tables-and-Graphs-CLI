@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/tdulcet/Tables-and-Graphs-CLI/workflows/CI/badge.svg?branch=main)](https://github.com/tdulcet/Tables-and-Graphs-CLI/actions)
+[![Actions Status](https://github.com/tdulcet/Tables-and-Graphs-CLI/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tdulcet/Tables-and-Graphs-CLI/actions/workflows/ci.yml)
 
 # Tables and Graphs CLI
 
