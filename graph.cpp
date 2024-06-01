@@ -3,7 +3,7 @@
 // Requires downloading the Table header only library: https://github.com/tdulcet/Table-and-Graph-Libs/blob/master/tables.hpp
 // Requires downloading the Graph header only library: https://github.com/tdulcet/Table-and-Graph-Libs/blob/master/graphs.hpp
 
-// Compile: g++ -std=c++17 -Wall -g -O3 -flto graph.cpp -o graph
+// Compile: g++ -std=gnu++17 -Wall -g -O3 -flto graph.cpp -o graph
 
 // Run: ./graph [OPTION(S)]... [FILE(S)]...
 
@@ -57,10 +57,7 @@ int column(const size_t width, const T &array, const tables::options &aoptions)
 	const size_t rows = array.size();
 	const size_t columns = array[0].size();
 
-	int rowwidth[rows][columns];
-	for (size_t i = 0; i < rows; ++i)
-		for (size_t j = 0; j < columns; ++j)
-			rowwidth[i][j] = 0;
+	vector<vector<int>> rowwidth(rows, vector<int>(columns));
 
 	for (size_t i = 0; i < rows; ++i)
 	{
@@ -73,9 +70,7 @@ int column(const size_t width, const T &array, const tables::options &aoptions)
 
 	for (; acolumns > columns; acolumns -= columns)
 	{
-		int columnwidth[acolumns];
-		for (size_t j = 0; j < acolumns; ++j)
-			columnwidth[j] = 0;
+		vector<int> columnwidth(acolumns);
 
 		for (size_t i = 0; i < rows; ++i)
 		{
@@ -88,7 +83,7 @@ int column(const size_t width, const T &array, const tables::options &aoptions)
 			}
 		}
 
-		size_t awidth = accumulate(columnwidth, columnwidth + acolumns, 0ul);
+		size_t awidth = accumulate(columnwidth.cbegin(), columnwidth.cend(), 0ul);
 
 		if (aoptions.tableborder or aoptions.cellborder or aoptions.headerrow or aoptions.headercolumn)
 			awidth += (((2 * aoptions.padding) + 1) * acolumns) + (aoptions.tableborder ? 1 : -1);
@@ -107,7 +102,7 @@ int column(const size_t width, const T &array, const tables::options &aoptions)
 	{
 		const size_t k = (i * columns) / acolumns;
 
-		aarray[k].insert(aarray[k].end(), array[i].begin(), array[i].end());
+		aarray[k].insert(aarray[k].end(), array[i].cbegin(), array[i].cend());
 	}
 
 	if (total % acolumns)
@@ -151,7 +146,7 @@ vector<vector<basic_string<T>>> input(basic_istream<T> &in, const char *delimite
 				size_t pos = 0;
 				do
 				{
-					size_t end = line.find_first_of(delimiter, pos);
+					const size_t end = line.find_first_of(delimiter, pos);
 					array.push_back(line.substr(pos, end - pos));
 					pos = end != basic_string<T>::npos ? end + 1 : end;
 				} while (pos != basic_string<T>::npos);
@@ -557,7 +552,7 @@ int main(int argc, char *argv[])
 
 	if (aaarray.size() == 1)
 	{
-		const size_t max = (*max_element(aaarray[0].begin(), aaarray[0].end(), [](const auto &a, const auto &b)
+		const size_t max = (*max_element(aaarray[0].cbegin(), aaarray[0].cend(), [](const auto &a, const auto &b)
 										 { return a.size() < b.size(); }))
 							   .size();
 
@@ -579,7 +574,7 @@ int main(int argc, char *argv[])
 				aaarray.push_back(temp);
 			}
 
-			if (!all_of(aaarray[0].begin(), aaarray[0].end(), [max](const auto &array)
+			if (!all_of(aaarray[0].cbegin(), aaarray[0].cend(), [&max](const auto &array)
 						{ return array.size() == max; }))
 			{
 				cerr << "Warning: The rows of the array should have the same number of columns (" << max << ").\n";
@@ -596,7 +591,7 @@ int main(int argc, char *argv[])
 	size_t max = 0;
 	for (auto &array : aaarray)
 	{
-		const size_t amax = (*max_element(array.begin(), array.end(), [](const auto &a, const auto &b)
+		const size_t amax = (*max_element(array.cbegin(), array.cend(), [](const auto &a, const auto &b)
 										  { return a.size() < b.size(); }))
 								.size();
 		if (amax > max)
@@ -605,8 +600,8 @@ int main(int argc, char *argv[])
 
 	const size_t columns = max == 1 ? 1 : 2;
 
-	if (!all_of(aaarray.begin(), aaarray.end(), [columns](const auto &array)
-				{ return all_of(array.begin(), array.end(), [columns](const auto &x)
+	if (!all_of(aaarray.cbegin(), aaarray.cend(), [&columns](const auto &array)
+				{ return all_of(array.cbegin(), array.cend(), [columns](const auto &x)
 								{ return x.size() == columns; }); }))
 	{
 		cerr << "Warning: The array should have one or two columns.\n";
@@ -670,7 +665,7 @@ int main(int argc, char *argv[])
 				{
 					const char *const token = y.c_str();
 					T number;
-					if constexpr (is_integral<T>::value)
+					if constexpr (is_integral_v<T>)
 					{;
 						char *p;
 						number = strtoimax(token, &p, frombase);
@@ -723,7 +718,7 @@ int main(int argc, char *argv[])
 		return graphs::plots(height, width, xmin, xmax, ymin, ymax, aarray, aoptions);
 	};
 
-	int code = integer ? ainput.operator()<intmax_t>() : ainput.operator()<long double>();
+	const int code = integer ? ainput.operator()<intmax_t>() : ainput.operator()<long double>();
 
 	if (legend)
 	{

@@ -2,7 +2,7 @@
 
 // Requires downloading the Table header only library: https://github.com/tdulcet/Table-and-Graph-Libs/blob/master/tables.hpp
 
-// Compile: g++ -std=c++17 -Wall -g -O3 -flto table.cpp -o table
+// Compile: g++ -std=gnu++17 -Wall -g -O3 -flto table.cpp -o table
 
 // Run: ./table [OPTION(S)]... [FILE(S)]...
 
@@ -70,7 +70,7 @@ vector<vector<basic_string<T>>> input(basic_istream<T> &in, const char *delimite
 				size_t pos = 0;
 				do
 				{
-					size_t end = line.find_first_of(delimiter, pos);
+					const size_t end = line.find_first_of(delimiter, pos);
 					array.push_back(line.substr(pos, end - pos));
 					pos = end != basic_string<T>::npos ? end + 1 : end;
 				} while (pos != basic_string<T>::npos);
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
 			{
 				aaarray = input(cin, delimiter, line_delim, keep_empty_lines);
 
-				aarray.insert(aarray.end(), aaarray.begin(), aaarray.end());
+				aarray.insert(aarray.end(), aaarray.cbegin(), aaarray.cend());
 			}
 			else
 			{
@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
 				{
 					aaarray = input(fin, delimiter, line_delim, keep_empty_lines);
 
-					aarray.insert(aarray.end(), aaarray.begin(), aaarray.end());
+					aarray.insert(aarray.end(), aaarray.cbegin(), aaarray.cend());
 
 					// fin.close();
 				}
@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
 	if (aarray.empty())
 		return 0;
 
-	const size_t max = (*max_element(aarray.begin(), aarray.end(), [](const auto &a, const auto &b)
+	const size_t max = (*max_element(aarray.cbegin(), aarray.cend(), [](const auto &a, const auto &b)
 									 { return a.size() < b.size(); }))
 						   .size();
 
