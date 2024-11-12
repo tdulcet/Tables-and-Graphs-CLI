@@ -33,7 +33,7 @@ jobs:
     - name: Script
       run: |
         ARGS=( -std=gnu++17 -Wall -g -Og )
-        if [[ $CXX =~ ^clang ]]; then
+        if [[ $CXX == clang* ]]; then
             ARGS+=( -fsanitize=address,undefined,integer )
         else
             ARGS+=( -fsanitize=address,undefined )

@@ -178,7 +178,7 @@ Options:
                                     light-dashed:   Light Dashed
                                     heavy-dashed:   Heavy Dashed
     -c, --color <COLOR>     Graph/Plot color (default 'red')
-                                Used only when plotting a single input/series. Otherwise, colors red - white (2 - 16) are used inorder. The system default color is used where the plots cross. <COLOR> can be:
+                                Used only when plotting a single input/series. Otherwise, colors red - bright white (2 - 16) are used inorder. The system default color is used where the plots cross. <COLOR> can be:
                                     default:        System default
                                     black:          Black
                                     red:            Red (default)
@@ -187,15 +187,15 @@ Options:
                                     blue:           Blue
                                     magenta:        Magenta
                                     cyan:           Cyan
-                                    light-gray:     Light Gray
-                                    dark-gray:      Dark Gray
-                                    light-red:      Light Red
-                                    light-green:    Light Green
-                                    light-yellow:   Light Yellow
-                                    light-blue:     Light Blue
-                                    light-magenta:  Light Magenta
-                                    light-cyan:     Light Cyan
                                     white:          White
+                                    gray:           Gray
+                                    bright-red:     Bright Red
+                                    bright-green:   Bright Green
+                                    bright-yellow:  Bright Yellow
+                                    bright-blue:    Bright Blue
+                                    bright-magenta: Bright Magenta
+                                    bright-cyan:    Bright Cyan
+                                    bright-white:   Bright White
 
         --help              Display this help and exit
         --version           Output version information and exit
