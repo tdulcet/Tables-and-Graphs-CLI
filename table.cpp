@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 			aoptions.headercolumn = true;
 			break;
 		case 'l':
-			aoptions.alignment = left;
+			aoptions.alignment = ios_base::left;
 			break;
 		case 'r':
 			aoptions.headerrow = true;
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
 			keep_empty_lines = true;
 			break;
 		case 'R':
-			aoptions.alignment = right;
+			aoptions.alignment = ios_base::right;
 			break;
 		case 'S':
 			aoptions.style = xargmatch("--style", optarg, style_args, size(style_args), tables::style_types);
