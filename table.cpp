@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 
 	const char *delimiter = nullptr;
 	char line_delim = '\n';
-	
+
 	bool keep_empty_lines = false;
 
 	const int frombase = 0;

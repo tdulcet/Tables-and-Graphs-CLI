@@ -124,9 +124,9 @@ Options:
     -t, --title <TITLE>     Graph Name/Title
         --name <TITLE>          Show a title above the graph. The title is word wrapped based on the current width of the terminal.
     -h, --height <HEIGHT>   Graph height (default 0)
-                                If HEIGHT is 0, it will be set to the current height of the terminal (number of rows times four).
+                                If HEIGHT is 0, it will be set to the current height of the terminal (number of rows).
     -w, --width <WIDTH>     Graph width (default 0)
-                                If WIDTH is 0, it will be set to the current width of the terminal (number of columns times two).
+                                If WIDTH is 0, it will be set to the current width of the terminal (number of columns).
     -x, --x-min <XMIN>      Minimum x value (default 0)
                                 If XMIN and XMAX are both 0, they will be set to the respective minimum and maximum values of x in the input.
     -X, --x-max <XMAX>      Maximum x value (default 0)
@@ -137,8 +137,13 @@ Options:
                                 If YMIN and YMAX are both 0, they will be set to the respective minimum and maximum values of y in the input.
     -C, --type <TYPE>       Type (default 'braille')
                                 <TYPE> can be:
-                                    braille:        Braille (default)
-                                    block:          Block
+                                    braille:                  Braille (default)
+                                    block:                    Block
+                                    block-quadrant:           Block quadrant
+                                    separated-block-quadrant: Separated block quadrant
+                                    block-sextant:            Block sextant
+                                    separated-block-sextant:  Separated block sextant
+                                    block-octant:             Block octant
     -m, --mark <MARK>       Mark type (default 'dot')
                                 <MARK> can be:
                                     dot:            Dot (default)
@@ -222,19 +227,19 @@ UNIT options:
 
 Examples:
     Output plot
-    $ printf '1 1\n2 2\n3 3\n4 4\n5 5\n6 6\n' | graph --height 80 --width 80 --x-min -10 --x-max 10 --y-min -10 --y-max 10
+    $ printf '1 1\n2 2\n3 3\n4 4\n5 5\n6 6\n' | graph --height 20 --width 40 --x-min -10 --x-max 10 --y-min -10 --y-max 10
 
     Output plot of single series (Bash Syntax)
-    $ for i in {-20..20}; do echo "$i $(( i + 1 ))"; done | graph --height 160 --width 160 --x-min -20 --x-max 20 --y-min -20 --y-max 20
+    $ for i in {-20..20}; do echo "$i $(( i + 1 ))"; done | graph --height 40 --width 80 --x-min -20 --x-max 20 --y-min -20 --y-max 20
 
     Output plot of multiple series (Bash Syntax)
-    $ for i in {-20..20}; do echo "$i $(( 2 * i )) $(( i ** 2 ))"; done | graph --height 160 --width 160 --x-min -20 --x-max 20 --y-min -20 --y-max 20
+    $ for i in {-20..20}; do echo "$i $(( 2 * i )) $(( i ** 2 ))"; done | graph --height 40 --width 80 --x-min -20 --x-max 20 --y-min -20 --y-max 20
 
     Output graph of multiple functions
-    $ awk 'BEGIN { pi=atan2(0, -1); width=160; xmin=-(2*pi); xmax=2*pi; xstep=(xmax-xmin)/width; for(i=0; i<width*2; ++i) { x=((i/2)*xstep)+xmin; print x,sin(x),cos(x),sin(x)/cos(x) } }' | graph --height 160 --width 160 --y-min -4 --y-max 4 --no-units-labels
+    $ awk 'BEGIN { pi=atan2(0, -1); width=160; xmin=-(2*pi); xmax=2*pi; xstep=(xmax-xmin)/width; for(i=0; i<width*2; ++i) { x=((i/2)*xstep)+xmin; print x,sin(x),cos(x),sin(x)/cos(x) } }' | graph --height 40 --width 80 --y-min -4 --y-max 4 --no-units-labels
 
     Output a plot in each style (Bash syntax)
-    $ for s in ascii basic light heavy double arc light-dashed heavy-dashed; do for i in {0..9}; do echo "$i $(( i + 1 ))"; done | graph --height 80 --width 80 --x-min -10 --x-max 10 --y-min -10 --y-max 10 --style=$s --title "Style: $s"; done
+    $ for s in ascii basic light heavy double arc light-dashed heavy-dashed; do for i in {0..9}; do echo "$i $(( i + 1 ))"; done | graph --height 20 --width 40 --x-min -10 --x-max 10 --y-min -10 --y-max 10 --style=$s --title "Style: $s"; done
 
 ```
 

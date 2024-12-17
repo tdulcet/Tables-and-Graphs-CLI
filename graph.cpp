@@ -29,7 +29,7 @@ const char *const style_args[] = {"ascii", "basic", "light", "heavy", "double", 
 
 const char *const color_args[] = {"default", "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "gray", "bright-red", "bright-green", "bright-yellow", "bright-blue", "bright-magenta", "bright-cyan", "bright-white"};
 
-const char *const type_args[] = {"braille", "block" /* , "histogram" */};
+const char *const type_args[] = {"braille", "block", "block-quadrant", "separated-block-quadrant", "block-sextant", "separated-block-sextant", "block-octant" /* , "histogram" */};
 
 const char *const mark_args[] = {"dot", "plus", "square"};
 
@@ -181,9 +181,9 @@ Options:
     -t, --title <TITLE>     Graph Name/Title
         --name <TITLE>          Show a title above the graph. The title is word wrapped based on the current width of the terminal.
     -h, --height <HEIGHT>   Graph height (default 0)
-                                If HEIGHT is 0, it will be set to the current height of the terminal (number of rows times four).
+                                If HEIGHT is 0, it will be set to the current height of the terminal (number of rows).
     -w, --width <WIDTH>     Graph width (default 0)
-                                If WIDTH is 0, it will be set to the current width of the terminal (number of columns times two).
+                                If WIDTH is 0, it will be set to the current width of the terminal (number of columns).
     -x, --x-min <XMIN>      Minimum x value (default 0)
                                 If XMIN and XMAX are both 0, they will be set to the respective minimum and maximum values of x in the input.
     -X, --x-max <XMAX>      Maximum x value (default 0)
@@ -194,8 +194,13 @@ Options:
                                 If YMIN and YMAX are both 0, they will be set to the respective minimum and maximum values of y in the input.
     -C, --type <TYPE>       Type (default 'braille')
                                 <TYPE> can be:
-                                    braille:        Braille (default)
-                                    block:          Block
+                                    braille:                  Braille (default)
+                                    block:                    Block
+                                    block-quadrant:           Block quadrant
+                                    separated-block-quadrant: Separated block quadrant
+                                    block-sextant:            Block sextant
+                                    separated-block-sextant:  Separated block sextant
+                                    block-octant:             Block octant
     -m, --mark <MARK>       Mark type (default 'dot')
                                 <MARK> can be:
                                     dot:            Dot (default)
@@ -282,23 +287,23 @@ UNIT options:
 Examples:
     Output plot
     $ printf '1 1\n2 2\n3 3\n4 4\n5 5\n6 6\n' | )d"
-		 << programname << R"d( --height 80 --width 80 --x-min -10 --x-max 10 --y-min -10 --y-max 10
+		 << programname << R"d( --height 20 --width 40 --x-min -10 --x-max 10 --y-min -10 --y-max 10
 
     Output plot of single series (Bash Syntax)
     $ for i in {-20..20}; do echo "$i $(( i + 1 ))"; done | )d"
-		 << programname << R"d( --height 160 --width 160 --x-min -20 --x-max 20 --y-min -20 --y-max 20
+		 << programname << R"d( --height 40 --width 80 --x-min -20 --x-max 20 --y-min -20 --y-max 20
 
     Output plot of multiple series (Bash Syntax)
     $ for i in {-20..20}; do echo "$i $(( 2 * i )) $(( i ** 2 ))"; done | )d"
-		 << programname << R"d( --height 160 --width 160 --x-min -20 --x-max 20 --y-min -20 --y-max 20
+		 << programname << R"d( --height 40 --width 80 --x-min -20 --x-max 20 --y-min -20 --y-max 20
 
     Output graph of multiple functions
     $ awk 'BEGIN { pi=atan2(0, -1); width=160; xmin=-(2*pi); xmax=2*pi; xstep=(xmax-xmin)/width; for(i=0; i<width*2; ++i) { x=((i/2)*xstep)+xmin; print x,sin(x),cos(x),sin(x)/cos(x) } }' | )d"
-		 << programname << R"d( --height 160 --width 160 --y-min -4 --y-max 4 --no-units-labels
+		 << programname << R"d( --height 40 --width 80 --y-min -4 --y-max 4 --no-units-labels
 
     Output a plot in each style (Bash syntax)
     $ for s in ascii basic light heavy double arc light-dashed heavy-dashed; do for i in {0..9}; do echo "$i $(( i + 1 ))"; done | )d"
-		 << programname << R"( --height 80 --width 80 --x-min -10 --x-max 10 --y-min -10 --y-max 10 --style=$s --title "Style: $s"; done
+		 << programname << R"( --height 20 --width 40 --x-min -10 --x-max 10 --y-min -10 --y-max 10 --style=$s --title "Style: $s"; done
 
 )";
 }
@@ -579,7 +584,7 @@ int main(int argc, char *argv[])
 			{
 				cerr << "Warning: The rows of the array should have the same number of columns (" << max << ").\n";
 			}
-			
+
 			for (auto &array : aaarray[0])
 			{
 				if (array.size() != 2)
@@ -666,7 +671,7 @@ int main(int argc, char *argv[])
 					const char *const token = y.c_str();
 					T number;
 					if constexpr (is_integral_v<T>)
-					{;
+					{
 						char *p;
 						number = strtoimax(token, &p, frombase);
 						if (*p)
@@ -732,7 +737,10 @@ int main(int argc, char *argv[])
 		for (size_t i = 0; i < arrays; ++i)
 		{
 			const unsigned acolor = arrays == 1 ? aoptions.color : (i % (size(graphs::colors) - 2)) + 2;
-			aarray[i] = {graphs::colors[acolor] + string(columns == 1 ? graphs::bars[8] : aoptions.type == graphs::type_block ? graphs::blocks[15] : graphs::dots[255]) + graphs::colors[0], names[i]};
+			aarray[i] = {graphs::outputcolor(graphs::color_type(acolor)) + string(columns == 1 ? graphs::bars[8] : aoptions.type == graphs::type_braille ? graphs::dots[255]
+																																						 : graphs::blocks_quadrant[15]) +
+							 graphs::outputcolor(graphs::color_default),
+						 names[i]};
 		}
 
 		column((width / 2) + (aoptions.border ? 2 : 0), aarray, tableoptions);
