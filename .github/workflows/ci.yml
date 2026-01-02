@@ -19,8 +19,8 @@ jobs:
     env:
       CXX: ${{ matrix.cxx }}
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6
       with:
         repository: tdulcet/Table-and-Graph-Libs
         path: Table-and-Graph-Libs
